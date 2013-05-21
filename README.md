@@ -1,5 +1,7 @@
 # ActAsTimeAsBoolean
 
+[![Build Status][travis_img]][travis_url]
+
 _Add time_as_boolean feature to your ruby classes_
 
 ## Installation
@@ -53,3 +55,6 @@ p item.inactive?
 ## Licence
 
 Released under the MIT License. See the [LICENSE](https://github.com/caedes/act_as_time_as_boolean/blob/master/LICENSE.md) file for further details.
+
+[travis_img]: https://travis-ci.org/caedes/act_as_time_as_boolean.png?branch=master
+[travis_url]: https://travis-ci.org/caedes/act_as_time_as_boolean
