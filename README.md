@@ -3,6 +3,7 @@
 [![Build Status][travis_img]][travis_url]
 [![Gem Version][fury_img]][fury_url]
 [![Code Climate][code_climate_img]][code_climate_url]
+[![Dependency Status][gemnasium_img]][gemnasium_url]
 
 _Add time_as_boolean feature to your ruby classes_
 
@@ -64,3 +65,5 @@ Released under the MIT License. See the [LICENSE](https://github.com/caedes/act_
 [fury_url]: http://badge.fury.io/rb/act_as_time_as_boolean
 [code_climate_img]: https://codeclimate.com/github/caedes/act_as_time_as_boolean.png
 [code_climate_url]: https://codeclimate.com/github/caedes/act_as_time_as_boolean
+[gemnasium_img]: https://gemnasium.com/caedes/act_as_time_as_boolean.png
+[gemnasium_url]: https://gemnasium.com/caedes/act_as_time_as_boolean
