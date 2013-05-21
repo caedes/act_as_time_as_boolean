@@ -20,19 +20,26 @@ gem 'act_as_time_as_boolean'
 class Item
   include ActAsTimeAsBoolean
 
-  attr_accessor :archived_at
+  attr_accessor :active_at
 
-  time_as_boolean :archived
+  time_as_boolean :active, opposite: :inactive
 end
 
 item = Item.new
 
-p item.archived?
+p item.active?
 #=> false
 
-item.archived = Time.now
-p item.archived?
+p item.inactive?
 #=> true
+
+item.active = true
+
+p item.active?
+#=> true
+
+p item.inactive?
+#=> false
 ```
 
 ## Contributing
