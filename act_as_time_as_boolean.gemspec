@@ -16,4 +16,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec', '~> 2.13'
   s.add_development_dependency 'coveralls', '~> 0.6'
+  s.add_development_dependency 'json', '~> 1.7.7'
 end
