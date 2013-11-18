@@ -29,13 +29,12 @@ protected
 
   def self.field_setter_method(field)
     self.send :define_method, :"#{field}=" do |value|
-      if (value && value != 'false' && value != '0' && !self.send(field)) || (!value && self.send(field))
-        if value && value != 'false' && value != '0'
-          send :"#{field}_at=", Time.now
-          true
-        else
-          send :"#{field}_at=", nil
-        end
+      value = value && value.to_s != '0'
+      if value && !self.send(field)
+        send :"#{field}_at=", Time.now
+        true
+      elsif !value && self.send(field)
+        send :"#{field}_at=", nil
       end
     end
   end
