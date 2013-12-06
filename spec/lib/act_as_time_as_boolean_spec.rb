@@ -98,6 +98,18 @@ describe ActAsTimeAsBoolean do
 
           it { subject.active_at.should be_nil }
         end
+
+        describe "with '1'" do
+          before { subject.active = '1' }
+
+          it { subject.active_at.should == time }
+        end
+
+        describe "with '0'" do
+          before { subject.active = '0' }
+
+          it { subject.active_at.should be_nil }
+        end
       end
 
       describe 'calling inactive' do
@@ -129,6 +141,18 @@ describe ActAsTimeAsBoolean do
 
         describe 'with false' do
           before { subject.active = false }
+
+          it { subject.active_at.should be_nil }
+        end
+
+        describe "with '1'" do
+          before { subject.active = '1' }
+
+          it { subject.active_at.class.should == Time }
+        end
+
+        describe "with '0'" do
+          before { subject.active = '0' }
 
           it { subject.active_at.should be_nil }
         end
