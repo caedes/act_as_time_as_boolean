@@ -133,28 +133,20 @@ describe ActAsTimeAsBoolean do
       end
 
       describe 'calling active=' do
-        describe 'with true' do
-          before { subject.active = true }
+        [true, '1'].each do |value|
+          describe "with #{value}" do
+            before { subject.active = value }
 
-          it { subject.active_at.class.should == Time }
+            it { subject.active_at.class.should == Time }
+          end
         end
 
-        describe 'with false' do
-          before { subject.active = false }
+        [false, '0'].each do |value|
+          describe "with #{value}" do
+            before { subject.active = value }
 
-          it { subject.active_at.should be_nil }
-        end
-
-        describe "with '1'" do
-          before { subject.active = '1' }
-
-          it { subject.active_at.class.should == Time }
-        end
-
-        describe "with '0'" do
-          before { subject.active = '0' }
-
-          it { subject.active_at.should be_nil }
+            it { subject.active_at.should be_nil }
+          end
         end
       end
 
