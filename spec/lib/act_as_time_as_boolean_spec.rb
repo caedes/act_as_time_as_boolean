@@ -13,7 +13,7 @@ class TimeAsBooleanWithOppositeModel
 
   attr_accessor :active_at
 
-  def initialize(options={})
+  def initialize(options = {})
     @active_at = options[:active_at] || nil
   end
 

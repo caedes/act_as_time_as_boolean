@@ -1,12 +1,11 @@
 module ActAsTimeAsBoolean
-
   def self.included(base)
-    base.define_singleton_method(:time_as_boolean) do |field, options={}|
+    base.define_singleton_method(:time_as_boolean) do |field, options = {}|
       ActAsTimeAsBoolean.time_as_boolean_method field, options
     end
   end
 
-protected
+  protected
 
   def self.time_as_boolean_method(field, options)
     field = field.to_sym
@@ -20,30 +19,30 @@ protected
   end
 
   def self.field_getter_method(field)
-    self.send :define_method, field do
+    send :define_method, field do
       !send(:"#{field}_at").nil?
     end
 
-    self.send :alias_method, :"#{field}?", :"#{field}"
+    send :alias_method, :"#{field}?", :"#{field}"
   end
 
   def self.field_setter_method(field)
-    self.send :define_method, :"#{field}=" do |value|
+    send :define_method, :"#{field}=" do |value|
       value = value && value.to_s != '0'
-      if value && !self.send(field)
+      if value && !send(field)
         send :"#{field}_at=", Time.now
         true
-      elsif !value && self.send(field)
+      elsif !value && send(field)
         send :"#{field}_at=", nil
       end
     end
   end
 
   def self.opposite_getter_method(field, opposite)
-    self.send :define_method, :"#{opposite}" do
+    send :define_method, :"#{opposite}" do
       send(:"#{field}_at").nil?
     end
 
-    self.send :alias_method, :"#{opposite}?", :"#{opposite}"
+    send :alias_method, :"#{opposite}?", :"#{opposite}"
   end
 end
