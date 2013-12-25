@@ -1,5 +1,7 @@
 module ActAsTimeAsBoolean
   def self.included(base)
+    @base = base
+
     base.define_singleton_method(:time_as_boolean) do |field, options = {}|
       ActAsTimeAsBoolean.time_as_boolean_method field, options
     end
@@ -15,6 +17,14 @@ module ActAsTimeAsBoolean
 
     if options[:opposite]
       ActAsTimeAsBoolean.opposite_getter_method field, options[:opposite]
+    end
+
+    if ActAsTimeAsBoolean.has_scope_method?
+      ActAsTimeAsBoolean.field_scope field
+
+      if options[:opposite]
+        ActAsTimeAsBoolean.opposite_field_scope field, options[:opposite]
+      end
     end
   end
 
@@ -44,5 +54,23 @@ module ActAsTimeAsBoolean
     end
 
     send :alias_method, :"#{opposite}?", :"#{opposite}"
+  end
+
+  def self.field_scope(field)
+    @base.send :scope, field, -> {
+      @base.send :where, [ "#{field}_at IS NOT NULL AND #{field}_at <= ?", Time.current]
+    }
+  end
+
+  def self.opposite_field_scope(field, opposite)
+    @base.send :scope, opposite, -> {
+      @base.send :where, [ "#{field}_at IS NULL OR #{field}_at > ?", Time.current]
+    }
+  end
+
+  def self.has_scope_method?
+    defined?(ActiveRecord::Base) &&
+    ActiveRecord::Base.is_a?(Class) &&
+    ActiveRecord::Base.methods.include?(:scope)
   end
 end
