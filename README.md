@@ -33,19 +33,29 @@ end
 
 item = Item.new
 
-p item.active?
+item.active?
 #=> false
 
-p item.inactive?
+item.inactive?
 #=> true
 
 item.active = true
 
-p item.active?
+item.active?
 #=> true
 
-p item.inactive?
+item.inactive?
 #=> false
+```
+
+#### On a rails app
+
+```ruby
+Item.active
+#=>  #<ActiveRecord::Relation [...]>
+
+Item.inactive
+#=>  #<ActiveRecord::Relation [...]>
 ```
 
 ## Contributing
