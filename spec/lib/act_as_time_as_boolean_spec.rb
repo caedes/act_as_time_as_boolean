@@ -20,6 +20,34 @@ class TimeAsBooleanWithOppositeModel
   time_as_boolean :active, opposite: :inactive
 end
 
+# Awesome mock to test scope
+class ActiveRecord
+end
+
+class ActiveRecord::Base
+  def self.scope(name, body, &block)
+    define_singleton_method name do
+      # Nothing to do here, just a mock
+    end
+  end
+end
+
+class InheritedModel < ActiveRecord::Base
+  include ActAsTimeAsBoolean
+
+  attr_accessor :active_at
+
+  time_as_boolean :active
+end
+
+class InheritedModelWithOpposite < ActiveRecord::Base
+  include ActAsTimeAsBoolean
+
+  attr_accessor :active_at
+
+  time_as_boolean :active, opposite: :inactive
+end
+
 describe ActAsTimeAsBoolean do
   it 'defines time_as_boolean class method' do
     SimpleTimeAsBooleanModel.singleton_methods.should include(:time_as_boolean)
@@ -69,6 +97,24 @@ describe ActAsTimeAsBoolean do
       end
       it 'defines inactive? method' do
         subject.methods.should include(:inactive?)
+      end
+    end
+
+    describe 'on a rails app' do
+      describe 'with :active param' do
+        it 'define active scope' do
+          InheritedModel.methods.should include(:active)
+        end
+      end
+
+      describe 'with :active and opposite param' do
+        it 'define active scope' do
+          InheritedModelWithOpposite.methods.should include(:active)
+        end
+
+        it 'define inactive scope' do
+          InheritedModelWithOpposite.methods.should include(:inactive)
+        end
       end
     end
   end
