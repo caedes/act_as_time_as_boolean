@@ -26,6 +26,14 @@ module ActAsTimeAsBoolean
         ActAsTimeAsBoolean.opposite_field_scope field, options[:opposite]
       end
     end
+
+    if ActAsTimeAsBoolean.is_active_record_inherited?
+       ActAsTimeAsBoolean.field_bang_method field
+
+      if options[:opposite]
+        ActAsTimeAsBoolean.opposite_bang_method field, options[:opposite]
+      end
+    end
   end
 
   def self.field_getter_method(field)
@@ -48,12 +56,26 @@ module ActAsTimeAsBoolean
     end
   end
 
+  def self.field_bang_method(field)
+    send :define_method, :"#{field}!" do
+      send :"#{field}=", true
+      save!
+    end
+  end
+
   def self.opposite_getter_method(field, opposite)
     send :define_method, :"#{opposite}" do
       send(:"#{field}_at").nil?
     end
 
     send :alias_method, :"#{opposite}?", :"#{opposite}"
+  end
+
+  def self.opposite_bang_method(field, opposite)
+    send :define_method, :"#{opposite}!" do
+      send :"#{field}=", false
+      save!
+    end
   end
 
   def self.field_scope(field)
@@ -68,9 +90,14 @@ module ActAsTimeAsBoolean
     }
   end
 
-  def self.has_scope_method?
+  def self.is_active_record_inherited?
     defined?(ActiveRecord::Base) &&
     ActiveRecord::Base.is_a?(Class) &&
+    @base < ActiveRecord::Base
+  end
+
+  def self.has_scope_method?
+    is_active_record_inherited? &&
     ActiveRecord::Base.methods.include?(:scope)
   end
 end
