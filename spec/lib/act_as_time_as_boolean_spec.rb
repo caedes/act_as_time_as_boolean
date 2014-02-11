@@ -30,6 +30,9 @@ class ActiveRecord::Base
       # Nothing to do here, just a mock
     end
   end
+
+  def save!
+  end
 end
 
 class InheritedModel < ActiveRecord::Base
@@ -81,39 +84,51 @@ describe ActAsTimeAsBoolean do
     end
 
     describe 'with :active and opposite param' do
-      subject { TimeAsBooleanWithOppositeModel.new }
+      subject { TimeAsBooleanWithOppositeModel.new.methods }
 
       it 'defines active method' do
-        subject.methods.should include(:active)
+        subject.should include(:active)
       end
       it 'defines active? method' do
-        subject.methods.should include(:active?)
+        subject.should include(:active?)
       end
       it 'defines active= method' do
-        subject.methods.should include(:active=)
+        subject.should include(:active=)
       end
       it 'defines inactive method' do
-        subject.methods.should include(:inactive)
+        subject.should include(:inactive)
       end
       it 'defines inactive? method' do
-        subject.methods.should include(:inactive?)
+        subject.should include(:inactive?)
       end
     end
 
     describe 'on a rails app' do
       describe 'with :active param' do
+        subject { InheritedModel.new }
+
         it 'define active scope' do
-          InheritedModel.methods.should include(:active)
+          subject.class.methods.should include(:active)
+        end
+
+        it 'defines active! method' do
+          subject.methods.should include(:active!)
         end
       end
 
       describe 'with :active and opposite param' do
+        subject { InheritedModelWithOpposite.new }
+
         it 'define active scope' do
-          InheritedModelWithOpposite.methods.should include(:active)
+          subject.class.methods.should include(:active)
         end
 
         it 'define inactive scope' do
-          InheritedModelWithOpposite.methods.should include(:inactive)
+          subject.class.methods.should include(:inactive)
+        end
+
+        it 'defines inactive! method' do
+          subject.methods.should include(:inactive!)
         end
       end
     end
@@ -202,6 +217,32 @@ describe ActAsTimeAsBoolean do
 
       describe 'calling inactive?' do
         it { subject.inactive?.should be_true }
+      end
+    end
+
+    describe 'with an ActiveRecord inherited instance' do
+      subject { InheritedModel.new }
+
+      describe 'calling active!' do
+        before { subject.active! }
+
+        it { subject.active?.should be_true }
+      end
+    end
+
+    describe 'with an ActiveRecord inherited with opposite instance' do
+      subject { InheritedModelWithOpposite.new }
+
+      describe 'calling active!' do
+        before { subject.active! }
+
+        it { subject.active?.should be_true }
+      end
+
+      describe 'calling inactive!' do
+        before { subject.inactive! }
+
+        it { subject.active?.should be_false }
       end
     end
   end
