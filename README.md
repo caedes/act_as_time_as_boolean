@@ -10,20 +10,22 @@ _Add time_as_boolean feature to your ruby classes_
 
 ## Installation
 
-```shell
-gem install act_as_time_as_boolean
-```
-
-Or in your Gemfile:
+### Ruby 1.9.3+, 2+
 
 ```ruby
 gem 'act_as_time_as_boolean'
 ```
 
+### Ruby 1.9.2
+
+```ruby
+gem 'act_as_time_as_boolean', '~> 0.4.0'
+```
+
 ## Usage
 
 ```ruby
-class Item
+class Item < ActiveRecord::Base
   include ActAsTimeAsBoolean
 
   attr_accessor :active_at
@@ -46,11 +48,7 @@ item.active?
 
 item.inactive?
 #=> false
-```
 
-#### On a rails app
-
-```ruby
 Item.active
 #=>  #<ActiveRecord::Relation [...]>
 
