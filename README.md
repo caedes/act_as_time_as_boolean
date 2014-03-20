@@ -58,11 +58,7 @@ Item.inactive
 
 ## Contributing
 
-1. Fork repository
-2. Create a branch following a [successfull branching model](http://nvie.com/posts/a-successful-git-branching-model/)
-3. Write your feature/fix
-4. Write tests
-5. Pull request
+[Contributors](https://github.com/caedes/act_as_time_as_boolean/graphs/contributors) and [CONTRIBUTING](https://github.com/caedes/act_as_time_as_boolean/blob/master/CONTRIBUTING.md)
 
 ## Licence
 
