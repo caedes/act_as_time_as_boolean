@@ -1,66 +1,15 @@
-require_relative '../spec_helper'
-
-class SimpleTimeAsBooleanModel
-  include ActAsTimeAsBoolean
-
-  attr_accessor :active_at
-
-  time_as_boolean :active
-end
-
-class TimeAsBooleanWithOppositeModel
-  include ActAsTimeAsBoolean
-
-  attr_accessor :active_at
-
-  def initialize(options = {})
-    @active_at = options[:active_at] || nil
-  end
-
-  time_as_boolean :active, opposite: :inactive
-end
-
-# Awesome mock to test scope
-class ActiveRecord
-end
-
-class ActiveRecord::Base
-  def self.scope(name, body, &block)
-    define_singleton_method name do
-      # Nothing to do here, just a mock
-    end
-  end
-
-  def save!
-  end
-end
-
-class InheritedModel < ActiveRecord::Base
-  include ActAsTimeAsBoolean
-
-  attr_accessor :active_at
-
-  time_as_boolean :active
-end
-
-class InheritedModelWithOpposite < ActiveRecord::Base
-  include ActAsTimeAsBoolean
-
-  attr_accessor :active_at
-
-  time_as_boolean :active, opposite: :inactive
-end
+require 'spec_helper'
 
 describe ActAsTimeAsBoolean do
   it 'defines time_as_boolean class method' do
-    SimpleTimeAsBooleanModel.singleton_methods.should include(:time_as_boolean)
+    Article.singleton_methods.should include(:time_as_boolean)
   end
 
   describe 'calling time_as_boolean' do
     describe 'without param' do
       it 'raises an ArgumentError' do
         expect do
-          class NoParamTimeAsBooleanModel
+          class Article < ActiveRecord::Base
             include ActAsTimeAsBoolean
 
             time_as_boolean
@@ -70,7 +19,7 @@ describe ActAsTimeAsBoolean do
     end
 
     describe 'with :active param' do
-      subject { SimpleTimeAsBooleanModel.new.methods }
+      subject { Article.new.methods }
 
       it 'defines active method' do
         subject.should include(:active)
@@ -84,7 +33,7 @@ describe ActAsTimeAsBoolean do
     end
 
     describe 'with :active and opposite param' do
-      subject { TimeAsBooleanWithOppositeModel.new.methods }
+      subject { ArticleWithOpposite.new.methods }
 
       it 'defines active method' do
         subject.should include(:active)
@@ -103,9 +52,9 @@ describe ActAsTimeAsBoolean do
       end
     end
 
-    describe 'on a rails app' do
+    describe 'scopes' do
       describe 'with :active param' do
-        subject { InheritedModel.new }
+        subject { Article.new }
 
         it 'define active scope' do
           subject.class.methods.should include(:active)
@@ -117,7 +66,7 @@ describe ActAsTimeAsBoolean do
       end
 
       describe 'with :active and opposite param' do
-        subject { InheritedModelWithOpposite.new }
+        subject { ArticleWithOpposite.new }
 
         it 'define active scope' do
           subject.class.methods.should include(:active)
@@ -137,7 +86,7 @@ describe ActAsTimeAsBoolean do
   describe 'using ActAsTimeAsBoolean' do
     describe 'with an active instance' do
       let(:time) { Time.now }
-      subject { TimeAsBooleanWithOppositeModel.new active_at: time }
+      subject { ArticleWithOpposite.new active_at: time }
 
       describe 'calling active' do
         it { subject.active.should be_true }
@@ -180,10 +129,22 @@ describe ActAsTimeAsBoolean do
       describe 'calling inactive?' do
         it { subject.inactive?.should be_false }
       end
+
+      describe 'calling active!' do
+        before { subject.active! }
+
+        it { subject.active?.should be_true }
+      end
+
+      describe 'calling inactive!' do
+        before { subject.inactive! }
+
+        it { subject.active?.should be_false }
+      end
     end
 
     describe 'with an inactive instance' do
-      subject { TimeAsBooleanWithOppositeModel.new }
+      subject { ArticleWithOpposite.new }
 
       describe 'calling active' do
         it { subject.active.should be_false }
@@ -198,7 +159,7 @@ describe ActAsTimeAsBoolean do
           describe "with #{value}" do
             before { subject.active = value }
 
-            it { subject.active_at.class.should == Time }
+            it { subject.active_at.class.should == ActiveSupport::TimeWithZone }
           end
         end
 
@@ -218,20 +179,6 @@ describe ActAsTimeAsBoolean do
       describe 'calling inactive?' do
         it { subject.inactive?.should be_true }
       end
-    end
-
-    describe 'with an ActiveRecord inherited instance' do
-      subject { InheritedModel.new }
-
-      describe 'calling active!' do
-        before { subject.active! }
-
-        it { subject.active?.should be_true }
-      end
-    end
-
-    describe 'with an ActiveRecord inherited with opposite instance' do
-      subject { InheritedModelWithOpposite.new }
 
       describe 'calling active!' do
         before { subject.active! }
