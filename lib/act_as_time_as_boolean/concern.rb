@@ -24,6 +24,8 @@ module ActAsTimeAsBoolean
         send :"before_#{field}" if respond_to? :"before_#{field}"
         send :"#{field}=", true
         save!
+        puts respond_to?(:"after_#{field}")
+        puts :"after_#{field}"
         send :"after_#{field}" if respond_to? :"after_#{field}"
       end
 
