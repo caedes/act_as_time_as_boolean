@@ -21,8 +21,10 @@ module ActAsTimeAsBoolean
       end
 
       define_method :"#{field}!" do
+        send :"before_#{field}" if defined? :"before_#{field}"
         send :"#{field}=", true
         save!
+        send :"after_#{field}" if defined? :"after_#{field}"
       end
 
       scope field, -> {
@@ -37,8 +39,10 @@ module ActAsTimeAsBoolean
         send :alias_method, :"#{opposite}?", :"#{opposite}"
 
         define_method :"#{opposite}!" do
+          send :"before_#{opposite}" if defined? :"before_#{opposite}"
           send :"#{field}=", false
           save!
+          send :"after_#{opposite}" if defined? :"after_#{opposite}"
         end
 
         scope opposite, -> {
