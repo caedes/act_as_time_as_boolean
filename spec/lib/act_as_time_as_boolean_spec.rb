@@ -30,6 +30,9 @@ describe ActAsTimeAsBoolean do
       it 'defines active= method' do
         subject.should include(:active=)
       end
+      it 'defines active! method' do
+        subject.should include(:active!)
+      end
     end
 
     describe 'with :active and opposite param' do
@@ -50,34 +53,29 @@ describe ActAsTimeAsBoolean do
       it 'defines inactive? method' do
         subject.should include(:inactive?)
       end
+      it 'defines inactive! method' do
+        subject.should include(:inactive!)
+      end
     end
 
     describe 'scopes' do
       describe 'with :active param' do
-        subject { Article.new }
+        subject { Article }
 
         it 'define active scope' do
-          subject.class.methods.should include(:active)
-        end
-
-        it 'defines active! method' do
-          subject.methods.should include(:active!)
+          subject.methods.should include(:active)
         end
       end
 
       describe 'with :active and opposite param' do
-        subject { ArticleWithOpposite.new }
+        subject { ArticleWithOpposite }
 
         it 'define active scope' do
-          subject.class.methods.should include(:active)
+          subject.methods.should include(:active)
         end
 
         it 'define inactive scope' do
-          subject.class.methods.should include(:inactive)
-        end
-
-        it 'defines inactive! method' do
-          subject.methods.should include(:inactive!)
+          subject.methods.should include(:inactive)
         end
       end
     end
@@ -89,11 +87,11 @@ describe ActAsTimeAsBoolean do
       subject { ArticleWithOpposite.new active_at: time }
 
       describe 'calling active' do
-        it { subject.active.should be_true }
+        it { subject.active.should be true }
       end
 
       describe 'calling active?' do
-        it { subject.active?.should be_true }
+        it { subject.active?.should be true }
       end
 
       describe 'calling active=' do
@@ -123,23 +121,23 @@ describe ActAsTimeAsBoolean do
       end
 
       describe 'calling inactive' do
-        it { subject.inactive.should be_false }
+        it { subject.inactive.should be false }
       end
 
       describe 'calling inactive?' do
-        it { subject.inactive?.should be_false }
+        it { subject.inactive?.should be false }
       end
 
       describe 'calling active!' do
         before { subject.active! }
 
-        it { subject.active?.should be_true }
+        it { subject.active?.should be true }
       end
 
       describe 'calling inactive!' do
         before { subject.inactive! }
 
-        it { subject.active?.should be_false }
+        it { subject.active?.should be false }
       end
     end
 
@@ -147,11 +145,11 @@ describe ActAsTimeAsBoolean do
       subject { ArticleWithOpposite.new }
 
       describe 'calling active' do
-        it { subject.active.should be_false }
+        it { subject.active.should be false }
       end
 
       describe 'calling active?' do
-        it { subject.active?.should be_false }
+        it { subject.active?.should be false }
       end
 
       describe 'calling active=' do
@@ -173,23 +171,23 @@ describe ActAsTimeAsBoolean do
       end
 
       describe 'calling inactive' do
-        it { subject.inactive.should be_true }
+        it { subject.inactive.should be true }
       end
 
       describe 'calling inactive?' do
-        it { subject.inactive?.should be_true }
+        it { subject.inactive?.should be true }
       end
 
       describe 'calling active!' do
         before { subject.active! }
 
-        it { subject.active?.should be_true }
+        it { subject.active?.should be true }
       end
 
       describe 'calling inactive!' do
         before { subject.inactive! }
 
-        it { subject.active?.should be_false }
+        it { subject.active?.should be false }
       end
     end
   end
