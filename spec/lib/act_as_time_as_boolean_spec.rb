@@ -67,6 +67,22 @@ describe ActAsTimeAsBoolean do
         end
       end
 
+      describe 'with :active param and scope: false' do
+        subject { ArticleWithScopeFalse }
+
+        it 'define active scope' do
+          subject.methods.should_not include(:active)
+        end
+      end
+
+      describe 'with :active param and scope: :reactive' do
+        subject { ArticleWithScope }
+
+        it 'define active scope' do
+          subject.methods.should include(:reactive)
+        end
+      end
+
       describe 'with :active and opposite param' do
         subject { ArticleWithOpposite }
 

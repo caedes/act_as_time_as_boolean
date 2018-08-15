@@ -25,9 +25,12 @@ module ActAsTimeAsBoolean
         save!
       end
 
-      scope field, -> {
-        where "#{table_name}.#{field}_at IS NOT NULL AND #{table_name}.#{field}_at <= ?", Time.current
-      }
+      unless options[:scope] == false
+        scope_name = options[:scope] || field
+        scope scope_name, -> {
+          where "#{table_name}.#{field}_at IS NOT NULL AND #{table_name}.#{field}_at <= ?", Time.current
+        }
+      end
 
       if options[:opposite]
         opposite = options[:opposite]
