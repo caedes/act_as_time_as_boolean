@@ -16,10 +16,9 @@ Gem::Specification.new do |s|
   s.add_dependency 'activesupport', '>= 3.2'
 
   s.add_development_dependency 'rake'
-  s.add_development_dependency 'coveralls', '~> 0.6'
-  s.add_development_dependency 'json', '~> 1.7.7'
-  s.add_development_dependency 'combustion', '~> 0.5.1'
-  s.add_development_dependency 'rspec-rails', '~> 2.14'
-  s.add_development_dependency 'sqlite3', '~> 1.3.3'
-  s.add_development_dependency 'activerecord', '~> 4.0.4'
+  s.add_development_dependency 'coveralls'
+  s.add_development_dependency 'combustion'
+  s.add_development_dependency 'rspec-rails'
+  s.add_development_dependency 'sqlite3'
+  s.add_development_dependency 'activerecord'
 end
